@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="display-1">About</h1>
+<h2 class="display-5">Why make a recommender?</h2>
+<p class="lead">While Spotify has all our user data and can make really good guesses at what we may like,
+    there isn't a specific search tool because they have an approach based on exploration and user history.
+    This application aims to be a recommender based on a tracklist you input and filters you set,
+    like genres, year range or artist popularity.</p>
+<h2 class="display-5">How does it work?</h2>
+<p class="lead">Basically it asks for the user to select their favorite tracks from Spotify, then it compares each of
+    them - one by one -
+    with every track in the recommender dataset. In order to do this it uses the audio features provided by the Spotify
+    API and after that
+    it computes the euclidean distance between them to generate a similarity index. The recommended track is the one
+    from the dataset
+    with the highest similarity index compared to the inputted track (closest to 1.0).
+</p>
+<p class="lead">A more personalized recommendation can be made by inputting the user's data of their preferred artists,
+    after being logged into a Spotify account (that's the only information retrieved).
+</p>
+<h2 class="display-5">The features</h2>
+<p class="lead">The features evaluated in the tracks are the following <a
+        href="https://developer.spotify.com/documentation/web-api/reference/tracks/get-several-audio-features/"
+        target="_blank">(according to the Spotify API docs)</a>:</p>
+<ul class="lead">
+    <li><b>Acousticness:</b> the higher this value, a lower number of electrical amplified instruments are used</li>
+    <li><b>Danceability:</b> how suitable for dancing according the tempo, rhythm stability, beat strength, and overall
+        regularity</li>
+    <li><b>Energy:</b> intensity and activity of the track, energetic tracks feel fast, loud and noisy</li>
+    <li><b>Instrumentalness:</b> the higher this value, the less vocals the track has. Values above 0.5 are considered
+        instrumental tracks,
+        but confidence is higher as it approaches to 1.0</li>
+    <li><b>Liveness:</b> represents the likelihood of the track being performed with live audience. A value above 0.8
+        suggests the track is live</li>
+    <li><b>Speechiness:</b> presence of spoken words in the track as:
+        <ul>
+            <li><b>Above 0.66:</b> track made entirely of spoken words (stand up show, podcast)</li>
+            <li><b>Between 0.33 and 0.66:</b> track with both music and speech</li>
+            <li><b>Under 0.33:</b> mostly instrumental tracks</li>
+        </ul>
+    </li>
+    <li><b>Tempo:</b> overall tempo of the track in <a href="https://en.wikipedia.org/wiki/Tempo#Measurement"
+            target="_blank">beats per minute</a></li>
+    <li><b>Valence:</b> musical positiveness of the track, the higher the value, the more positive (happy, cheerful) it
+        sounds, the lower the value the more negative (sad, angry)</li>
+</ul>
+<h2 class="display-5">The distance calculation</h2>
+<p class="lead">The general idea is to compare the difference between all the features of the inputted tracks against
+    the features of
+    each of the tracks in the dataset. To do this, we use <a href="https://en.wikipedia.org/wiki/Euclidean_distance"
+        target="_blank">euclidean distance</a>.
+</p>
+<h3 class="display-6">Examples</h3>
+<p class="lead">If we had only 2 features (or dimensions) named <i>1</i> as the horizontal axis and <i>2</i> as the
+    vertical axis, we could
+    see the tracks as the points <i>p</i> and <i>q</i> in a plane like this:</p>
+<img src="static/img/pythagoras.png" class="figure-img img-fluid rounded center" alt="2 dimension example">
+<p class="lead">Or, if we had <i>n</i> dimensions like in our case where <i>n > 2</i>:</p>
+<img src="static/img/euclidean_distance.png" class="figure-img img-fluid rounded" alt="n dimensions example">
+<p class="lead">Where <i>p</i> and <i>q</i> are the tracks and the subindexes (<i>1</i>, <i>2</i>, ..., <i>i</i>, ...,
+    <i>n</i>) are the features (acousticness, danceability, etc.)
+</p>
+<h2 class="display-5">Similarity</h2>
+<p class="lead">So, once we get the distances of each of the tracks we can compare the distance between the inputted
+    track and every other one in the dataset in the following way
+</p>
+<img src="static/img/similarity.png" class="figure-img img-fluid rounded" alt="similarity index formula">
+<p class="lead">and choose the track with similarity closest to 1.0 (the value of the inputted track) among the ones in the dataset.</p>
+{% endblock %}

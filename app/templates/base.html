@@ -1,0 +1,73 @@
+<html lang="en">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="../static/css/base.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Music Recommender</title>
+</head>
+
+<body>
+    <div id="page-container">
+        <header>
+            <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">
+                        <img src="static/img/music_logo.png" alt="" width="30" height="30"
+                            class="d-inline-block align-top" style="margin-right: 10px">
+                        Music Recommender
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            {% if page == 'home' %}
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
+                            <a class="nav-link" href="{{ url_for('dataset') }}">Dataset</a>
+                            <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                            {% elif page == 'dataset' %}
+                            <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('dataset') }}">Dataset</a>
+                            <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                            {% elif page == 'about' %}
+                            <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                            <a class="nav-link" href="{{ url_for('dataset') }}">Dataset</a>
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('about') }}">About</a>
+                            {% else %}
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
+                            <a class="nav-link" href="{{ url_for('dataset') }}">Dataset</a>
+                            <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main role="main">
+            <div style="margin-left: 50px; margin-right: 50px; margin-top: 80px;">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+        <footer class="footer">
+            <div id="footer-container" class="container">
+
+                <span class="text-muted" style="float: left;">Gabriel Ballesteros</span>
+                <span style="float: right; margin-top: 5px;">
+                    <a href="https://github.com/gabriel-ballesteros/spotify-recommender" target="_blank"><img
+                            src="static/img/GitHub_Logo.png" width="100" height="41"></a>
+                </span>
+            </div>
+        </footer>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+            crossorigin="anonymous"></script>
+    </div>
+</body>
+
+</html>

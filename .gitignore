@@ -1,0 +1,5 @@
+
+app/static/img/.DS_Store
+.DS_Store
+*.pyc
+.vscode/settings.json

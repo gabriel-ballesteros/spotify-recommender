@@ -2,27 +2,35 @@
 
 {% block content %}
 <h1 class="display-1">Dataset</h1>
-<h2 class="display-5">Exploratory data analysis</h2>
-
+<p class='lead' style="font-size: 30px; line-height: 200%;">
+  Currently, the track dataset has <span id="artists_number" class="bigger">x</span> artists,
+  <span id="albums_number" class="bigger">x</span> albums and <span id="tracks_number" class="bigger">x</span>
+  tracks across <span id="genres_number" class="bigger">x</span> genres spanning over <span id="years_number"
+    class="bigger">x</span>
+  years and it keeps growing the more this app is used!
+</p>
+<div class="border-bottom" style="margin-bottom: 20px;">
+  <h2 class="display-5">Exploratory data analysis</h2>
+</div>
 <div class="accordion" style="margin-top: 40px;">
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingOne">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-        aria-expanded="true" aria-controls="collapseOne" style="font-size: 25px;">
+      <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="font-size: 25px;">
         Album count by year
       </button>
     </h2>
-    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
       data-bs-parent="#accordionExample">
       <div class="accordion-body">
-        <img class="img-fluid" src="data:image/png;base64,{{dist_year}}"/>
+        <img class="img-fluid" src="data:image/png;base64,{{dist_year}}" />
       </div>
     </div>
   </div>
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingTwo">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-        aria-expanded="false" aria-controls="collapseTwo" style="font-size: 25px;">
+      <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="font-size: 25px;">
         Artist count per genre
       </button>
     </h2>
@@ -35,8 +43,8 @@
   </div>
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingThree">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree"
-        aria-expanded="false" aria-controls="collapseThree" style="font-size: 25px;">
+      <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="font-size: 25px;">
         Artist popularity distribution
       </button>
     </h2>
@@ -49,8 +57,8 @@
   </div>
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingFour">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour"
-        aria-expanded="false" aria-controls="collapseFour" style="font-size: 25px;">
+      <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" style="font-size: 25px;">
         Audio features by artist
       </button>
     </h2>
@@ -58,7 +66,7 @@
       data-bs-parent="#accordionExample">
       <div class="accordion-body">
         <div class="dropdown">
-          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
             data-bs-toggle="dropdown" aria-expanded="false">
             Select artist
           </button>
@@ -72,4 +80,69 @@
     </div>
   </div>
 </div>
+<!--
+<div class="border-bottom" style="margin-bottom: 20px;">
+  <h2 class="display-5" style="margin-top: 40px;">Tables in the database</h2>
+</div>
+<div class="accordion" style="margin-top: 40px;">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingArtist">
+      <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseArtist" aria-expanded="false" aria-controls="collapseArtist" style="font-size: 25px;">
+        Artists
+      </button>
+    </h2>
+    <div id="collapseArtist" class="accordion-collapse collapse" aria-labelledby="headingArtist"
+      data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <img class="img-fluid" src="data:image/png;base64,{{dist_year}}" />
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingAlbums">
+      <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseAlbums" aria-expanded="false" aria-controls="collapseAlbums" style="font-size: 25px;">
+        Albums
+      </button>
+    </h2>
+    <div id="collapseAlbums" class="accordion-collapse collapse" aria-labelledby="headingAlbums"
+      data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        Artist distributions by genre
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingTracks">
+      <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseTracks" aria-expanded="false" aria-controls="collapseTracks" style="font-size: 25px;">
+        Tracks
+      </button>
+    </h2>
+    <div id="collapseTracks" class="accordion-collapse collapse" aria-labelledby="headingTracks"
+      data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        Artists popularity distribution
+      </div>
+    </div>
+  </div>
+</div>
+-->
+<div class="border-bottom" style="margin-bottom: 20px; margin-top: 30px;">
+  <h2 class="display-5">Download</h2>
+</div>
+<p class="lead">You can download the last version of this dataset last updated on <span id="date_updated">date</span> here:</p>
+<button type="button" class="btn btn-dark">Download<svg style="bottom: 0.1em; left: 0.4em;
+  position: relative;" class="bi" width="20" height="20" fill="currentColor">
+      <use xlink:href="static/icons/bootstrap-icons.svg#download"/>
+    </svg></button>
+<script>
+  document.getElementById("artists_number").innerHTML = "5655";
+  document.getElementById("albums_number").innerHTML = "22457";
+  document.getElementById("tracks_number").innerHTML = "218456";
+  document.getElementById("genres_number").innerHTML = "312";
+  document.getElementById("years_number").innerHTML = "62";
+  document.getElementById("date_updated").innerHTML = "Dec 29 2020 16:07:10 GMT-0300";
+</script>
 {% endblock %}

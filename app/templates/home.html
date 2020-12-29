@@ -1,13 +1,125 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="jumbotron">
-    <h1 class="display-4">Hello, world!</h1>
-    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-    <hr class="my-4">
-    <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-    <p class="lead">
-      <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-    </p>
+<h1 class="display-1">Recommender</h1>
+
+<div class="border rounded" style="margin-bottom: 60px; margin-top: 30px;">
+  <div style="margin-left:40px;margin-right:40px;margin-bottom:40px;margin-top:20px;">
+    <div class="border-bottom" style="margin-bottom: 20px;">
+      <h2 class="display-4">Search your favourite tracks</h2>
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">Search tracks</span>
+      <input type="text" class="form-control" placeholder="By song, artist, album" aria-label="Search"
+        aria-describedby="basic-addon1">
+    </div>
+
+    <table class="table table-hover table-borderless">
+      <thead>
+        <tr>
+          <th scope="col" style="width: 25%;">Song</th>
+          <th scope="col" style="width: 25%;">Artist</th>
+          <th scope="col" style="width: 30%;">Album</th>
+          <th scope="col" style="width: 10%;">Year</th>
+          <th scope="col" style="width: 10%;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Wonderwall</td>
+          <td>Oasis</td>
+          <td>(What's the Story) Morning Glory?</td>
+          <td>1995</td>
+          <td class="d-grid gap-2"><button type="button" class="btn btn-dark btn-block list-button">Add<svg style="bottom: 0.1em; left: 1em;
+            position: relative;" class="bi" width="20" height="20" fill="currentColor">
+                <use xlink:href="static/icons/bootstrap-icons.svg#plus-square-fill" />
+              </svg></button></td>
+        </tr>
+        <tr>
+          <td>Parklife</td>
+          <td>Blur</td>
+          <td>Parklife</td>
+          <td>1994</td>
+          <td class="d-grid gap-2"><button type="button" class="btn btn-dark btn-block list-button">Add<svg style="bottom: 0.1em; left: 1em;
+            position: relative;" class="bi" width="20" height="20" fill="currentColor">
+                <use xlink:href="static/icons/bootstrap-icons.svg#plus-square-fill" />
+              </svg></button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="border-bottom" style="margin-bottom: 20px;">
+      <h2 class="display-4">Your list</h2>
+    </div>
+    <table class="table table-hover table-borderless">
+      <thead>
+        <tr>
+          <th scope="col" style="width: 25%;">Song</th>
+          <th scope="col" style="width: 25%;">Artist</th>
+          <th scope="col" style="width: 30%;">Album</th>
+          <th scope="col" style="width: 10%;">Year</th>
+          <th scope="col" style="width: 10%;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Wonderwall</td>
+          <td>Oasis</td>
+          <td>(What's the Story) Morning Glory?</td>
+          <td>1995</td>
+          <td class="d-grid gap-2"><button type="button" class="btn btn-dark btn-block list-button">Remove<svg style="bottom: 0.1em; left: 1em;
+            position: relative;" class="bi" width="20" height="20" fill="currentColor">
+                <use xlink:href="static/icons/bootstrap-icons.svg#dash-square-fill"/>
+              </svg></button></td>
+        </tr>
+        <tr>
+          <td>Parklife</td>
+          <td>Blur</td>
+          <td>Parklife</td>
+          <td>1994</td>
+          <td class="d-grid gap-2"><button type="button" class="btn btn-dark btn-block list-button">Remove<svg style="bottom: 0.1em; left: 1em;
+            position: relative;" class="bi" width="20" height="20" fill="currentColor">
+                <use xlink:href="static/icons/bootstrap-icons.svg#dash-square-fill"/>
+              </svg></button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="d-grid gap-2">
+      <button type="button" class="btn btn-dark btn-block">Empty the list <svg style="bottom: 0.1em; left: 0.2em;
+        position: relative;" class="bi" width="20" height="20" fill="currentColor">
+            <use xlink:href="static/icons/bootstrap-icons.svg#trash-fill" />
+          </svg></button>
+      <button type="button" class="btn btn-dark btn-block">Submit list for recommendation <svg style="bottom: 0.1em; left: 0.2em;
+        position: relative;" class="bi" width="20" height="20" fill="currentColor">
+            <use xlink:href="static/icons/bootstrap-icons.svg#check" />
+          </svg></button>
+    </div>
   </div>
+</div>
+
+<div class="border rounded" style="margin-bottom: 60px; margin-top: 30px;">
+  <div style="margin-left:40px;margin-right:40px;margin-bottom:40px;margin-top:20px;">
+    <div class="border-bottom" style="margin-bottom: 20px;">
+      <h2 class="display-4">Recommended tracks</h2>
+    </div>
+    <div class="d-grid gap-2">
+      <button type="button" class="btn btn-dark btn-block">Listen to this playlist on <img src="static/img/Spotify_Logo_RGB_White.png" style="bottom: 0.1em; left: 0.5em;
+        position: relative;" width="120"></button>
+    </div>
+  </div>
+</div>
+
+<!-- RECOMMENDER RESULTS
+<div class="border rounded">
+  <div style="margin-left:40px;margin-right:40px;margin-bottom:40px;margin-top:20px;">
+    <div class="border-bottom" style="margin-bottom: 20px;">
+      <h2 class="display-4">Your recommended tracks</h2>
+    </div>
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border" style="width: 10rem; height: 10rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+</div>
+-->
 {% endblock %}

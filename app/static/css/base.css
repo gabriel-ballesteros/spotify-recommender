@@ -17,3 +17,14 @@ html {
   #footer-container {
     margin-top: 10px;
   }
+
+td {
+  vertical-align : middle;
+}
+
+.list-button {
+  width: 150px !important;
+}
+
+.bigger { font-size:200%;
+}

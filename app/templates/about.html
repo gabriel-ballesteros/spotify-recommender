@@ -9,12 +9,9 @@
     like genres, year range or artist popularity.</p>
 <h2 class="display-5">How does it work?</h2>
 <p class="lead">Basically it asks for the user to select their favorite tracks from Spotify, then it compares each of
-    them - one by one -
-    with every track in the recommender dataset. In order to do this it uses the audio features provided by the Spotify
-    API and after that
-    it computes the euclidean distance between them to generate a similarity index. The recommended track is the one
-    from the dataset
-    with the highest similarity index compared to the inputted track (closest to 1.0).
+    them - one by one - with every track in the recommender dataset. In order to do this it gets the tracks' audio features provided by the Spotify
+    API and computes the euclidean distance between the inputted tracks and the dataset tracks to generate a similarity index. The recommended tracks are the ones
+    from the dataset with the highest similarity index compared to each of the inputted tracks (closest to 1.0).
 </p>
 <p class="lead">A more personalized recommendation can be made by inputting the user's data of their preferred artists,
     after being logged into a Spotify account (that's the only information retrieved).
@@ -54,17 +51,17 @@
 <h3 class="display-6">Examples</h3>
 <p class="lead">If we had only 2 features (or dimensions) named <i>1</i> as the horizontal axis and <i>2</i> as the
     vertical axis, we could
-    see the tracks as the points <i>p</i> and <i>q</i> in a plane like this:</p>
-<img src="static/img/pythagoras.png" class="figure-img img-fluid rounded center" alt="2 dimension example">
-<p class="lead">Or, if we had <i>n</i> dimensions like in our case where <i>n > 2</i>:</p>
-<img src="static/img/euclidean_distance.png" class="figure-img img-fluid rounded" alt="n dimensions example">
+    see the tracks as the points <i>p</i> and <i>q</i> and the distance between them in a plane like this:</p>
+<img src="static/img/pythagoras.png" class="figure-img img-fluid rounded center img-thumbnail" alt="2 dimension example">
+<p class="lead">Or, if we had more dimensions <i>n</i> like in our case where <i>n = 8</i>:</p>
+<img src="static/img/euclidean_distance.png" class="figure-img img-fluid rounded img-thumbnail" alt="n dimensions example">
 <p class="lead">Where <i>p</i> and <i>q</i> are the tracks and the subindexes (<i>1</i>, <i>2</i>, ..., <i>i</i>, ...,
     <i>n</i>) are the features (acousticness, danceability, etc.)
 </p>
 <h2 class="display-5">Similarity</h2>
-<p class="lead">So, once we get the distances of each of the tracks we can compare the distance between the inputted
-    track and every other one in the dataset in the following way
+<p class="lead">Once we get the distances of each of the tracks we can compare the distance between the inputted
+    track and every other one in the dataset in the following way:
 </p>
-<img src="static/img/similarity.png" class="figure-img img-fluid rounded" alt="similarity index formula">
+<img src="static/img/similarity.png" class="figure-img img-fluid rounded img-thumbnail" alt="similarity index formula">
 <p class="lead">and choose the track with similarity closest to 1.0 (the value of the inputted track) among the ones in the dataset.</p>
 {% endblock %}

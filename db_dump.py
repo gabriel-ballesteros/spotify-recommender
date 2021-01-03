@@ -4,7 +4,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from sqlalchemy import create_engine
 from time import sleep
 
-sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=config.SPOTIFY_CLIENT_ID, client_secret=config.SPOTIFY_CLIENT_SECRET),requests_timeout=15,retries=5)
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=config.SPOTIFY_CLIENT_ID, client_secret=config.SPOTIFY_CLIENT_SECRET),requests_timeout=6,retries=10)
 
 try:
     db_path = f'postgresql+psycopg2://{config.DBUSER}:{config.DBPASSWORD}@{config.HOST}/{config.DATABASE}'

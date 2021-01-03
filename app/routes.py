@@ -21,7 +21,7 @@ def home():
 def dataset():
     fig = Figure(figsize=(16,6))
     ax = fig.subplots()
-    plot=sns.barplot(x=[2010,2011,2012,2013,2014,2015,2016], y=[112,121,130,102,119,109,140], color='lightskyblue', ax=ax)
+    plot=sns.barplot(x=[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020], y=[112,121,130,102,119,109,140,170,181,190,210], color='grey', ax=ax)
     #plot.set_xlabel("Year",fontsize=20)
     #plot.set_ylabel("Album count",fontsize=20)
     plot.tick_params(labelsize=15)

@@ -2,12 +2,11 @@
 
 {% block content %}
 <h1 class="display-1">Dataset</h1>
-<p class='lead' style="font-size: 30px; line-height: 200%;">
-  Currently, the track dataset has <span id="artists_number" class="bigger">x</span> artists,
+<p class='lead text-justify' style="font-size: 30px; line-height: 200%;">
+  Currently, the track dataset has <span id="artists_number" class="bigger">x</span> artists, 
   <span id="albums_number" class="bigger">x</span> albums and <span id="tracks_number" class="bigger">x</span>
   tracks across <span id="genres_number" class="bigger">x</span> genres spanning over <span id="years_number"
-    class="bigger">x</span>
-  years and it keeps growing the more this app is used!
+    class="bigger">x</span> years and it keeps growing the more this app is used!
 </p>
 <div class="border-bottom" style="margin-bottom: 20px;">
   <h2 class="display-5">Exploratory data analysis</h2>
@@ -80,69 +79,22 @@
     </div>
   </div>
 </div>
-<!--
-<div class="border-bottom" style="margin-bottom: 20px;">
-  <h2 class="display-5" style="margin-top: 40px;">Tables in the database</h2>
-</div>
-<div class="accordion" style="margin-top: 40px;">
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="headingArtist">
-      <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
-        data-bs-target="#collapseArtist" aria-expanded="false" aria-controls="collapseArtist" style="font-size: 25px;">
-        Artists
-      </button>
-    </h2>
-    <div id="collapseArtist" class="accordion-collapse collapse" aria-labelledby="headingArtist"
-      data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <img class="img-fluid" src="data:image/png;base64,{{dist_year}}" />
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="headingAlbums">
-      <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
-        data-bs-target="#collapseAlbums" aria-expanded="false" aria-controls="collapseAlbums" style="font-size: 25px;">
-        Albums
-      </button>
-    </h2>
-    <div id="collapseAlbums" class="accordion-collapse collapse" aria-labelledby="headingAlbums"
-      data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        Artist distributions by genre
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="headingTracks">
-      <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
-        data-bs-target="#collapseTracks" aria-expanded="false" aria-controls="collapseTracks" style="font-size: 25px;">
-        Tracks
-      </button>
-    </h2>
-    <div id="collapseTracks" class="accordion-collapse collapse" aria-labelledby="headingTracks"
-      data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        Artists popularity distribution
-      </div>
-    </div>
-  </div>
-</div>
--->
 <div class="border-bottom" style="margin-bottom: 20px; margin-top: 30px;">
-  <h2 class="display-5">Download</h2>
+  <h2 class="display-5">Dataset</h2>
 </div>
-<p class="lead">You can download the last version of this dataset last updated on <span id="date_updated">date</span> here:</p>
-<button type="button" class="btn btn-dark">Download<svg style="bottom: 0.1em; left: 0.4em;
+<p class="lead">You can download the last version of this dataset last updated on <span id="date_updated">date</span>
+  here:</p>
+<button type="button" class="btn btn-primary">Download<svg style="bottom: 0.1em; left: 0.4em;
   position: relative;" class="bi" width="20" height="20" fill="currentColor">
-      <use xlink:href="static/icons/bootstrap-icons.svg#download"/>
-    </svg></button>
+    <use xlink:href="static/icons/bootstrap-icons.svg#download" />
+  </svg></button>
+<script src="https://cdn.rawgit.com/coderitual/odoo/feature/codevember16/lib/odoo.js"></script>
 <script>
-  document.getElementById("artists_number").innerHTML = "5655";
-  document.getElementById("albums_number").innerHTML = "22457";
-  document.getElementById("tracks_number").innerHTML = "218456";
-  document.getElementById("genres_number").innerHTML = "312";
-  document.getElementById("years_number").innerHTML = "62";
+  odoo.default({ el: '#artists_number', from: '', to: '5655', animationDelay: 100 });
+  odoo.default({ el: '#albums_number', from: '', to: '22057', animationDelay: 100 });
+  odoo.default({ el: '#tracks_number', from: '', to: '218456', animationDelay: 100 });
+  odoo.default({ el: '#genres_number', from: '', to: '312', animationDelay: 100 });
+  odoo.default({ el: '#years_number', from: '', to: '62', animationDelay: 100 });
   document.getElementById("date_updated").innerHTML = "Dec 29 2020 16:07:10 GMT-0300";
 </script>
 {% endblock %}

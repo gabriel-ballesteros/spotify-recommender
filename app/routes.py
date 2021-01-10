@@ -64,8 +64,11 @@ def search(search_string):
         results = sp.search(q=search_string,type="track")['tracks']['items']
     return jsonify(results)
 
-
 @app.route('/recommender/api/v1.0/get_recommendations/<int:from_year>&<int:to_year>&<int:listed_artists>&<int:popular_artists>&<int:exclude_explicit>&<str_list:track_ids>', methods=['GET'])
 def get_recommendations(from_year, to_year, listed_artists, popular_artists, exclude_explicit, track_ids):
     names, artists, albums, years, imgs, uris, matches = recommender.get_recommendation(client, from_year, to_year, listed_artists, popular_artists, exclude_explicit, sp.audio_features(track_ids))
     return jsonify ([{"name": names[i], "artist": artists[i], "album": albums[i], "year": int(years[i]), "img": imgs[i], "uri": "https://open.spotify.com/track/" + uris[i][14:], "match": matches[i]} for i in range(len(names))])
+
+@app.route('/recommender/api/v1.0/get_counts', methods=['GET'])
+def get_counts():
+    return jsonify(client.select_counts())

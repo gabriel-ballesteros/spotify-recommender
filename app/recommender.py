@@ -45,5 +45,4 @@ def get_recommendation(client, from_year, to_year, listed_artists, popular_artis
         img_list.append(results.loc[results[0]<0.95, 'img'].reset_index(drop=True)[0])
         uri_list.append(results.loc[results[0]<0.95, 'uri'].reset_index(drop=True)[0])
         match_list.append(round(results.loc[results[0]<0.95, 0].reset_index(drop=True)[0]*100,2))
-        app.logger.info(results.loc[results[0]<0.95, 0].reset_index(drop=True)[0])
     return name_list, artist_list, album_list, year_list, img_list, uri_list, match_list

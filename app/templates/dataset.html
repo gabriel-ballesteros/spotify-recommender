@@ -4,9 +4,8 @@
 <h1 class="display-1">Dataset</h1>
 <p class='lead text-justify' style="font-size: 30px; line-height: 200%;">
   Currently, the track dataset has <span id="artists_number" class="bigger"></span> artists, 
-  <span id="albums_number" class="bigger"></span> albums and <span id="tracks_number" class="bigger">x</span>
-  tracks across <span id="genres_number" class="bigger"></span> genres spanning over <span id="years_number"
-    class="bigger"></span> years and it keeps growing the more this app is used!
+  <span id="albums_number" class="bigger"></span> albums and <span id="tracks_number" class="bigger"></span>
+  tracks spanning over <span id="years_number" class="bigger"></span> years and it keeps growing!
 </p>
 <div class="border-bottom" style="margin-bottom: 20px;">
   <h2 class="display-5">Exploratory data analysis</h2>
@@ -90,11 +89,17 @@
   </svg></button>
 <script src="https://cdn.rawgit.com/coderitual/odoo/feature/codevember16/lib/odoo.js"></script>
 <script>
-  odoo.default({ el: '#artists_number', from: '', to: '5655', animationDelay: 100 });
-  odoo.default({ el: '#albums_number', from: '', to: '22057', animationDelay: 100 });
-  odoo.default({ el: '#tracks_number', from: '', to: '218456', animationDelay: 100 });
-  odoo.default({ el: '#genres_number', from: '', to: '312', animationDelay: 100 });
-  odoo.default({ el: '#years_number', from: '', to: '62', animationDelay: 100 });
+  $.get(`http://127.0.0.1:5000/recommender/api/v1.0/get_counts`, function (data) {
+    console.log(data);
+    tracks_count = data.tracks;
+    artists_count = data.artists;
+    albums_count = data.albums;
+    years = data.years;
+    odoo.default({ el: '#artists_number', from: '', to: tracks_count, animationDelay: 100 });
+    odoo.default({ el: '#albums_number', from: '', to: artists_count, animationDelay: 100 });
+    odoo.default({ el: '#tracks_number', from: '', to: albums_count, animationDelay: 100 });
+    odoo.default({ el: '#years_number', from: '', to: years, animationDelay: 100 });
+  });
   document.getElementById("date_updated").innerHTML = "Dec 29 2020 16:07:10 GMT-0300";
 </script>
 {% endblock %}

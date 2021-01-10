@@ -1,4 +1,4 @@
-from flask import render_template, make_response, jsonify
+from flask import render_template, make_response, jsonify, send_file
 from app import app, config, recommender
 from app.client import Client
 import logging
@@ -11,6 +11,8 @@ import requests
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 from werkzeug.routing import BaseConverter
+from datetime import datetime
+import os
 
 class StrListConverter(BaseConverter):
     regex = r'\w+(?:;\w+)*;?'
@@ -27,8 +29,22 @@ client = Client(config.DBUSER, config.DBPASSWORD, config.HOST, config.DATABASE)
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=config.SPOTIFY_CLIENT_ID, client_secret=config.SPOTIFY_CLIENT_SECRET))
 
-def generate_plot():
-    pass
+def generate_barplot(x, y, color, xrotation=0, tick_intervals=[], xlabel="", ylabel=""):
+    fig = Figure(figsize=(16,6))
+    ax = fig.subplots()
+    plot=sns.barplot(x, y, color=color, ax=ax)
+    if xlabel:
+        plot.set_xlabel(xlabel,fontsize=20)
+    if ylabel:
+        plot.set_ylabel(ylabel,fontsize=20)
+    plot.tick_params(labelsize=15)
+    for tick in ax.get_xticklabels():
+        tick.set_rotation(xrotation)
+    if tick_intervals:
+        ax.xaxis.set_ticks(tick_intervals)
+    buf = BytesIO()
+    fig.savefig(buf, format="png",bbox_inches='tight')
+    return base64.b64encode(buf.getbuffer()).decode("ascii")
 
 @app.route('/')
 @app.route('/home')
@@ -37,25 +53,20 @@ def home():
 
 @app.route('/dataset')
 def dataset():
-    fig = Figure(figsize=(16,6))
-    ax = fig.subplots()
-    plot=sns.barplot(x=[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020], y=[112,121,130,102,119,109,140,170,181,190,210], color='grey', ax=ax)
-    #plot.set_xlabel("Year",fontsize=20)
-    #plot.set_ylabel("Album count",fontsize=20)
-    plot.tick_params(labelsize=15)
-    buf = BytesIO()
-    fig.savefig(buf, format="png",bbox_inches='tight')
-    years = base64.b64encode(buf.getbuffer()).decode("ascii")
-
+    dataset_last_update = os.path.getmtime("/home/elros/spotify-recommender/app/static/spotify_dataset.sql")
+    datetime.utcfromtimestamp(dataset_last_update).strftime("%Y-%m-%d %H:%M:%S")
+    albums_per_year = client.select_albums_by_year()
+    artists_per_popularity = client.select_artists_by_popularity()
     artist_list = ['Aerosmith','Bon Jovi','Calvin Harris']
-    
-    return render_template('dataset.html', page='dataset', artist_list=artist_list, dist_year=years)
-
+    return render_template('dataset.html', page='dataset',
+    artist_list=artist_list,
+    dataset_last_update = str(datetime.utcfromtimestamp(dataset_last_update).strftime("%Y-%m-%d %H:%M:%S")),
+    albums_year=generate_barplot([x["year"] for x in albums_per_year],[x["albums"] for x in albums_per_year],color="green",xrotation=90),
+    popularity_artists=generate_barplot([x["popularity"] for x in artists_per_popularity], [x["artists"] for x in artists_per_popularity],color="gold",tick_intervals=[x*10-1 for x in range(10)]))
 
 @app.route('/about')
 def about():
     return render_template('about.html', page='about')
-
 
 @app.route('/recommender/api/v1.0/search/<string:search_string>', methods=['GET'])
 def search(search_string):
@@ -72,3 +83,8 @@ def get_recommendations(from_year, to_year, listed_artists, popular_artists, exc
 @app.route('/recommender/api/v1.0/get_counts', methods=['GET'])
 def get_counts():
     return jsonify(client.select_counts())
+
+@app.route('/download_dataset')
+def download_file ():
+    path = "/home/elros/spotify-recommender/app/static/spotify_dataset.sql"
+    return send_file(path, as_attachment=True)

@@ -21,7 +21,7 @@
     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
       data-bs-parent="#accordionExample">
       <div class="accordion-body">
-        <img class="img-fluid" src="data:image/png;base64,{{dist_year}}" />
+        <img class="img-fluid" src="data:image/png;base64,{{albums_year}}"/>
       </div>
     </div>
   </div>
@@ -49,7 +49,7 @@
     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
       data-bs-parent="#accordionExample">
       <div class="accordion-body">
-        Artists popularity distribution
+        <img class="img-fluid" src="data:image/png;base64,{{popularity_artists}}"/>
       </div>
     </div>
   </div>
@@ -81,7 +81,7 @@
 <div class="border-bottom" style="margin-bottom: 20px; margin-top: 30px;">
   <h2 class="display-5">Download</h2>
 </div>
-<p class="lead">You can download the last version of this dataset last updated on <span id="date_updated">date</span>
+<p class="lead">You can download the last version of this dataset last updated on {{dataset_last_update}}
   here:</p>
 <button type="button" class="btn btn-primary" href="">Dataset<svg style="bottom: 0.1em; left: 0.4em;
   position: relative;" class="bi" width="20" height="20" fill="currentColor">
@@ -95,11 +95,10 @@
     artists_count = data.artists;
     albums_count = data.albums;
     years = data.years;
-    odoo.default({ el: '#artists_number', from: '', to: tracks_count, animationDelay: 100 });
-    odoo.default({ el: '#albums_number', from: '', to: artists_count, animationDelay: 100 });
-    odoo.default({ el: '#tracks_number', from: '', to: albums_count, animationDelay: 100 });
+    odoo.default({ el: '#artists_number', from: '', to: artists_count, animationDelay: 100 });
+    odoo.default({ el: '#albums_number', from: '', to: albums_count, animationDelay: 100 });
+    odoo.default({ el: '#tracks_number', from: '', to: tracks_count, animationDelay: 100 });
     odoo.default({ el: '#years_number', from: '', to: years, animationDelay: 100 });
   });
-  document.getElementById("date_updated").innerHTML = "Dec 29 2020 16:07:10 GMT-0300";
 </script>
 {% endblock %}

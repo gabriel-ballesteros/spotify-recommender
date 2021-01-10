@@ -27,6 +27,20 @@ class Client:
         years = self.conn.execute("select (max(year) - min(year)) as years from album;").fetchone()['years']
         return {"tracks": tracks_count, "artists": artists_count, "albums": albums_count, "years": years}
 
+    def select_albums_by_year(self):
+        result = self.conn.execute("select year, count(1) as albums from album group by year order by 1 asc;")
+        albums_list = []
+        for row in result:
+            albums_list.append({"year": row["year"], "albums": row["albums"]})
+        return albums_list
+
+    def select_artists_by_popularity(self):
+        result = self.conn.execute("select popularity, count(1) as artists from artist where popularity != 0 group by popularity order by 1 asc")
+        popularity_dist = []
+        for row in result:
+            popularity_dist.append({"popularity": row["popularity"], "artists": row["artists"]})
+        return popularity_dist
+
     def __init__(self, DBUSER, DBPASSWORD, HOST, DATABASE):
         try:
             self.engine = create_engine(f'postgresql+psycopg2://{DBUSER}:{DBPASSWORD}@{HOST}/{DATABASE}')

@@ -3,52 +3,37 @@
 {% block content %}
 <h1 class="display-1">Recommender</h1>
 
-<div class="border rounded" style="margin-bottom: 60px; margin-top: 30px;">
-  <div style="margin-left:40px;margin-right:40px;margin-bottom:40px;margin-top:20px;">
+<div id="input_div" class="border rounded" style="margin-bottom: 60px; margin-top: 30px;">
+  <div style="margin-left:20px;margin-right:20px;margin-bottom:20px;margin-top:20px;">
     <div class="border-bottom" style="margin-bottom: 20px;">
-      <h2 class="display-4">Search your favourite tracks</h2>
+      <h2 class="display-4">Input</h2>
     </div>
+    <p class="lead">Search for your favourite tracks on Spotify, add them to a list, apply the filters you want and then
+      submit the list to get your recommendations</p>
     <div class="border rounded" style="margin-bottom: 20px;">
       <div style="margin: 20px">
         <div class="input-group mb-3">
-          <span class="input-group-text" id="basic-addon1">Search tracks</span>
-          <input type="text" class="form-control" placeholder="By song, artist, album" aria-label="Search"
-            aria-describedby="basic-addon1">
+          <input id="search-text" type="text" class="form-control"
+            placeholder="Search tracks, artists or albums on Spotify" aria-label="Search tracks or artists on Spotify"
+            aria-describedby="button-addon2">
+          <a tabindex=0 class="btn btn-primary" type="button" id="search-button" role="button" data-bs-toggle="popover"
+            data-bs-trigger="focus" title="Error" data-bs-content="The search field can't be empty">Search</a>
         </div>
-
+        <div class="border-bottom" style="margin-bottom: 20px;">
+          <h3>Results</h2>
+        </div>
         <table class="table table-hover table-borderless">
           <thead>
             <tr>
-              <th scope="col" style="width: 25%;">Song</th>
-              <th scope="col" style="width: 25%;">Artist</th>
+              <th scope="col" style="width: 30%;">Song</th>
+              <th scope="col" style="width: 30%;">Artist</th>
               <th scope="col" style="width: 30%;">Album</th>
-              <th scope="col" style="width: 10%;">Year</th>
-              <th scope="col" style="width: 10%;"></th>
+              <th scope="col" style="width: 5%;">Year</th>
+              <th scope="col" style="width: 5%;"></th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Wonderwall</td>
-              <td>Oasis</td>
-              <td>(What's the Story) Morning Glory?</td>
-              <td>1995</td>
-              <td class="d-grid gap-2"><button type="button" class="btn btn-primary btn-block list-button">Add<svg
-                    style="bottom: 0.1em; left: 1em;
-            position: relative;" class="bi" width="20" height="20" fill="currentColor">
-                    <use xlink:href="static/icons/bootstrap-icons.svg#plus-square-fill" />
-                  </svg></button></td>
-            </tr>
-            <tr>
-              <td>Parklife</td>
-              <td>Blur</td>
-              <td>Parklife</td>
-              <td>1994</td>
-              <td class="d-grid gap-2"><button type="button" class="btn btn-primary btn-block list-button">Add<svg
-                    style="bottom: 0.1em; left: 1em;
-            position: relative;" class="bi" width="20" height="20" fill="currentColor">
-                    <use xlink:href="static/icons/bootstrap-icons.svg#plus-square-fill" />
-                  </svg></button></td>
-            </tr>
+          <tbody id="search-table">
+
           </tbody>
         </table>
       </div>
@@ -56,102 +41,86 @@
     <div class="border rounded" style="margin-bottom: 20px;">
       <div style="margin: 20px">
         <div class="border-bottom" style="margin-bottom: 20px;">
-
           <h3>Your list</h2>
         </div>
         <table class="table table-hover table-borderless">
           <thead>
             <tr>
-              <th scope="col" style="width: 25%;">Song</th>
-              <th scope="col" style="width: 25%;">Artist</th>
+              <th scope="col" style="width: 30%;">Song</th>
+              <th scope="col" style="width: 30%;">Artist</th>
               <th scope="col" style="width: 30%;">Album</th>
-              <th scope="col" style="width: 10%;">Year</th>
-              <th scope="col" style="width: 10%;"></th>
+              <th scope="col" style="width: 5%;">Year</th>
+              <th scope="col" style="width: 5%;"></th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Wonderwall</td>
-              <td>Oasis</td>
-              <td>(What's the Story) Morning Glory?</td>
-              <td>1995</td>
-              <td class="d-grid gap-2"><button type="button" class="btn btn-danger btn-block list-button">Remove<svg
-                    style="bottom: 0.1em; left: 1em;
-            position: relative;" class="bi" width="20" height="20" fill="currentColor">
-                    <use xlink:href="static/icons/bootstrap-icons.svg#dash-square-fill" />
-                  </svg></button></td>
-            </tr>
-            <tr>
-              <td>Parklife</td>
-              <td>Blur</td>
-              <td>Parklife</td>
-              <td>1994</td>
-              <td class="d-grid gap-2"><button type="button" class="btn btn-danger btn-block list-button">Remove<svg
-                    style="bottom: 0.1em; left: 1em;
-            position: relative;" class="bi" width="20" height="20" fill="currentColor">
-                    <use xlink:href="static/icons/bootstrap-icons.svg#dash-square-fill" />
-                  </svg></button></td>
-            </tr>
+
+          <tbody id="list-table">
           </tbody>
+
         </table>
       </div>
     </div>
-    <div class="border-bottom" style="margin-bottom: 20px;">
-      <h3>Filters</h3>
-    </div>
-    <div style="margin-bottom: 20px;">
-      <div>
-        <label for="sliderFromYear" class="form-label">From year <span
-          id="toYear">1960</span></label>
-        <input type="range" class="form-range" min=1960 max=2020 value=1960 id="sliderFromYear">
+    <div class="border rounded" style="margin-bottom: 20px;">
+      <div style="margin: 20px">
+        <div class="border-bottom" style="margin-bottom: 20px;">
+          <h3>Filters</h3>
+        </div>
+        <div style="margin-bottom: 20px;">
+          <div>
+            <label for="sliderFromYear" class="form-label">From year <span id="fromYear">1960</span></label>
+            <input type="range" class="form-range" min=1960 max=2020 value=1960 id="sliderFromYear">
+          </div>
+          <div>
+            <label for="sliderToYear" class="form-label">To year <span id="toYear">2020</span></label>
+            <input type="range" class="form-range" min=1960 max=2020 value=2020 id="sliderToYear">
+          </div>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="listedArtists">
+          <label class="form-check-label" for="listedArtists">
+            Exclude artists in this list
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="popularArtists">
+          <label class="form-check-label" for="popularArtists">
+            Exclude popular artists
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="explicit">
+          <label class="form-check-label" for="popularArtists">
+            Exclude explicit tracks
+          </label>
+        </div>
       </div>
-      <div>
-        <label for="sliderToYear" class="form-label" oninput="setToYear(this.value)">To year <span
-            id="toYear">2020</span></label>
-        <input type="range" class="form-range" min=1960 max=2020 value=2020 id="sliderToYear">
-      </div>
-      <div>
-
-      </div>
-    </div>
-    
-
-
-
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="popularArtists">
-      <label class="form-check-label" for="popularArtists">
-        Exclude popular artists
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="explicit">
-      <label class="form-check-label" for="popularArtists">
-        Exclude explicit tracks
-      </label>
     </div>
     <div class="d-grid gap-2" style="margin-top: 30px;">
-      <button type="button" class="btn btn-danger btn-block">Empty the list <svg style="bottom: 0.1em; left: 0.2em;
+      <button id="empty-button" type="button" class="btn btn-danger btn-block">Empty the list <svg style="bottom: 0.1em; left: 0.2em;
           position: relative;" class="bi" width="20" height="20" fill="currentColor">
           <use xlink:href="static/icons/bootstrap-icons.svg#trash-fill" />
         </svg></button>
-      <button type="button" class="btn btn-primary btn-block">Submit list for recommendation <svg style="bottom: 0.1em; left: 0.2em;
+      <button id="submit-button" type="button" class="btn btn-primary btn-block">Submit list for recommendation <svg
+          style="bottom: 0.1em; left: 0.2em;
           position: relative;" class="bi" width="20" height="20" fill="currentColor">
           <use xlink:href="static/icons/bootstrap-icons.svg#file-arrow-up-fill" />
         </svg></button>
     </div>
   </div>
-
-
-</div>
 </div>
 
-<div class="border rounded" style="margin-left:50px;margin-right:50px; margin-bottom: 60px; margin-top: 30px;">
-  <div style="margin-left:40px;margin-right:40px;margin-bottom:40px;margin-top:20px;">
+<div class="text-center">
+  <div id="spinner_search" class="spinner-grow" style="display: none; width: 10rem; height: 10rem; margin-top: 10rem;" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<div id="recommendations_div" class="border rounded"
+  style="display: none; margin-left:30px;margin-right:30px; margin-bottom: 60px; margin-top: 30px;">
+  <div style="margin-left:20px;margin-right:20px;margin-bottom:20px;margin-top:20px;">
     <div class="border-bottom" style="margin-bottom: 20px;">
       <h2 class="display-4">Recommended tracks</h2>
     </div>
-
     <table class="table table-hover table-borderless">
       <thead>
         <tr>
@@ -162,42 +131,26 @@
           <th scope="col" style="width: 12%;"></th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>Wonderwall</td>
-          <td>Oasis</td>
-          <td>(What's the Story) Morning Glory?</td>
-          <td>1995</td>
-          <td class="d-grid gap-2"><img class="img-fluid rounded" 
-              src="https://i.scdn.co/image/ab67616d0000b2736f253c0104f24caed5e3e42e">
-            <button class="btn btn-success btn-block spotify">Listen on <img class="img-fluid" width="20px"
-                style="position:relative; left: 0.5em;" src="static/img/Spotify_Icon_RGB_White.png"></button>
-          </td>
-        </tr>
-        <tr>
-          <td>Parklife</td>
-          <td>Blur</td>
-          <td>Parklife</td>
-          <td>1994</td>
-          <td class="d-grid gap-2"><img class="img-fluid rounded"
-              src="https://upload.wikimedia.org/wikipedia/en/thumb/7/7d/BlurParklife.jpg/220px-BlurParklife.jpg">
-            <button class="btn btn-success btn-block spotify">Listen on <img class="img-fluid" width="20px"
-                style="position:relative; left: 0.5em;" src="static/img/Spotify_Icon_RGB_White.png"></button>
-          </td>
-        </tr>
+      <tbody id="recommendations_table">
+
       </tbody>
     </table>
     <div class="d-grid gap-2">
-      <button type="button" class="btn btn-success btn-block spotify">Listen to this playlist on <img
-          src="static/img/Spotify_Logo_RGB_White.png" style="bottom: 0.1em; left: 0.5em;
-        position: relative;" width="120"></button>
+      <button id="go_back_button" type="button" class="btn btn-primary btn-block">Go back to search other tracks <svg
+          style="bottom: 0.1em; left: 0.2em;
+        position: relative;" class="bi" width="20" height="20" fill="currentColor">
+          <use xlink:href="static/icons/bootstrap-icons.svg#arrow-counterclockwise" />
+        </svg></button>
     </div>
   </div>
 </div>
-
 <script>
-  function setToYear(year) {
-    document.getElementById("toYear").innerHTML = year;
-  }
+  $(document).on('input', '#sliderFromYear', function () {
+    $('#fromYear').html($(this).val());
+  });
+  $(document).on('input', '#sliderToYear', function () {
+    $('#toYear').html($(this).val());
+  });
 </script>
+<script type="module" src="../static/js/home.js"></script>
 {% endblock %}

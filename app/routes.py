@@ -7,12 +7,15 @@ import time
 from io import BytesIO
 from matplotlib.figure import Figure
 import seaborn as sns
+import plotly.graph_objects as go
 import requests
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 from werkzeug.routing import BaseConverter
 from datetime import datetime
 import os
+import warnings
+warnings.filterwarnings("ignore")
 
 class StrListConverter(BaseConverter):
     regex = r'\w+(?:;\w+)*;?'
@@ -46,6 +49,25 @@ def generate_barplot(x, y, color, xrotation=0, tick_intervals=[], xlabel="", yla
     fig.savefig(buf, format="png",bbox_inches='tight')
     return base64.b64encode(buf.getbuffer()).decode("ascii")
 
+def generate_radar_chart(x, y):
+    fig = go.Figure(data=go.Scatterpolar(
+    r=y,
+    theta=x,
+    fill='toself'
+    ))
+
+    fig.update_layout(
+    polar=dict(
+        radialaxis=dict(
+        visible=True
+        ),
+    ),
+    showlegend=False
+    )
+    buf = BytesIO()
+    fig.write_image(buf)
+    return base64.b64encode(buf.getbuffer()).decode("ascii")
+
 @app.route('/')
 @app.route('/home')
 def home():
@@ -53,15 +75,16 @@ def home():
 
 @app.route('/dataset')
 def dataset():
-    dataset_last_update = os.path.getmtime("/home/elros/spotify-recommender/app/static/spotify_dataset.sql")
-    datetime.utcfromtimestamp(dataset_last_update).strftime("%Y-%m-%d %H:%M:%S")
-    albums_per_year = client.select_albums_by_year()
-    artists_per_popularity = client.select_artists_by_popularity()
-    artist_list = ['Aerosmith','Bon Jovi','Calvin Harris']
+    #dataset_last_update = os.path.getmtime("/home/elros/spotify-recommender/app/static/spotify_dataset.sql")
+    #datetime.utcfromtimestamp(dataset_last_update).strftime("%Y-%m-%d %H:%M:%S")
+    albums_per_year=client.select_albums_by_year()
+    artists_per_genre=client.select_artists_by_genres()
+    artists_per_popularity=client.select_artists_by_popularity()
     return render_template('dataset.html', page='dataset',
-    artist_list=artist_list,
-    dataset_last_update = str(datetime.utcfromtimestamp(dataset_last_update).strftime("%Y-%m-%d %H:%M:%S")),
+    artist_list=client.select_all_artists(),
+    #dataset_last_update=str(datetime.utcfromtimestamp(dataset_last_update).strftime("%Y-%m-%d %H:%M:%S")),
     albums_year=generate_barplot([x["year"] for x in albums_per_year],[x["albums"] for x in albums_per_year],color="green",xrotation=90),
+    artists_by_genre=generate_barplot([x["genre"] for x in artists_per_genre], [x["artists"] for x in artists_per_genre], color="darkcyan", xrotation=45),
     popularity_artists=generate_barplot([x["popularity"] for x in artists_per_popularity], [x["artists"] for x in artists_per_popularity],color="gold",tick_intervals=[x*10-1 for x in range(10)]))
 
 @app.route('/about')
@@ -75,7 +98,7 @@ def search(search_string):
         results = sp.search(q=search_string,type="track")['tracks']['items']
     return jsonify(results)
 
-@app.route('/recommender/api/v1.0/get_recommendations/<int:from_year>&<int:to_year>&<int:listed_artists>&<int:popular_artists>&<int:exclude_explicit>&<str_list:track_ids>', methods=['GET'])
+@app.route('/recommender/api/v1.0/get_recommendations=<int:from_year>&<int:to_year>&<str_list:listed_artists>&<int:popular_artists>&<int:exclude_explicit>&<str_list:track_ids>', methods=['GET'])
 def get_recommendations(from_year, to_year, listed_artists, popular_artists, exclude_explicit, track_ids):
     names, artists, albums, years, imgs, uris, matches = recommender.get_recommendation(client, from_year, to_year, listed_artists, popular_artists, exclude_explicit, sp.audio_features(track_ids))
     return jsonify ([{"name": names[i], "artist": artists[i], "album": albums[i], "year": int(years[i]), "img": imgs[i], "uri": "https://open.spotify.com/track/" + uris[i][14:], "match": matches[i]} for i in range(len(names))])
@@ -85,6 +108,10 @@ def get_counts():
     return jsonify(client.select_counts())
 
 @app.route('/download_dataset')
-def download_file ():
-    path = "/home/elros/spotify-recommender/app/static/spotify_dataset.sql"
+def download_dataset():
+    path = "static/spotify_dataset.sql"
     return send_file(path, as_attachment=True)
+
+@app.route('/get_artist_features=<string:artist_id>', methods=['GET'])
+def get_artist_features(artist_id):
+    return generate_radar_chart(['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'speechiness', 'valence', 'tempo'], list(client.select_artist_features(artist_id).values()))

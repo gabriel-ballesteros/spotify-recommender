@@ -33,7 +33,7 @@ def get_recommendation(client, from_year, to_year, listed_artists, popular_artis
     match_list = []
 
     for features in features_list:
-        song = pd.DataFrame(columns=['danceability','energy','speechiness','acousticness','instrumentalness','liveness','valence','tempo'])
+        song = pd.DataFrame(columns=['acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence','tempo'])
         song = song.append(features, ignore_index=True)
         song = scaler.transform(song)
 

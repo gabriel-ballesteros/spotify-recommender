@@ -1,5 +1,6 @@
 
 $(document).ready(function () {
+    var api_url = "http://127.0.0.1:5000/recommender/api/v1.0";
     $("#search-button").click(function () {
         if (document.getElementById("search-text").value) {
             $("#search-button").empty();
@@ -7,7 +8,7 @@ $(document).ready(function () {
             $("#search-button").append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     Loading...`);
             $("#search-table").empty();
-            $.get(`http://127.0.0.1:5000/recommender/api/v1.0/search/${document.getElementById("search-text").value}`, function (data) {
+            $.get(`${api_url}/search/${document.getElementById("search-text").value}`, function (data) {
                 $("#search-table").empty()
                 data.forEach(async element => {
                     $("#search-table").append($(
@@ -37,7 +38,7 @@ $(document).ready(function () {
             $("#list-table").append($(`
             <tr>
             <td>${$(this).parent().parent().children().eq(0).text()}</td>
-            <td>${$(this).parent().parent().children().eq(1).text()}</td>
+            <td class="artist-name">${$(this).parent().parent().children().eq(1).text()}</td>
             <td>${$(this).parent().parent().children().eq(2).text()}</td>
             <td>${$(this).parent().parent().children().eq(3).text()}</td>
             <td class="d-grid gap-2"><button track_id="${$(this).attr("track_id")}"
@@ -70,17 +71,24 @@ $(document).ready(function () {
         var ids = Array.from($('.remove-button').map(function () {
             return $(this).attr('track_id');
         }));
+        var artists_in_list = [0];
+        if ($("#listedArtists").is(":checked")){
+            artists_in_list = Array.from($('.artist-name').map(function () {
+                return $(this).text();
+            }));
+        }
+
         $("#input_div").fadeOut(500);
         $("#spinner_search").fadeIn(500);
-        $.get(`http://127.0.0.1:5000/recommender/api/v1.0/get_recommendations/${$("#fromYear").text()}&${$("#toYear").text()}&${+ $("#listedArtists").is(":checked")}&${+ $("#popularArtists").is(":checked")}&${+ $("#explicit").is(":checked")}&${ids.join(";")}`, function (data) {
+        $.get(`${api_url}/get_recommendations=${$("#fromYear").text()}&${$("#toYear").text()}&${artists_in_list.join()}&${+ $("#popularArtists").is(":checked")}&${+ $("#explicit").is(":checked")}&${ids.join(";")}`, function (data) {
             $("#spinner_search").hide();
             $("#recommendations_div").fadeIn(500);
             data.forEach(element => {
                 var match_color = "limegreen";
-                if (element.match <= 30){
+                if (element.match <= 20){
                     match_color = "firebrick";
                 }
-                else if (element.match <= 70){
+                else if (element.match <= 80){
                     match_color = "yellow";
                 }
                 $("#recommendations_table").append($(`

@@ -3,9 +3,9 @@
 {% block content %}
 <h1 class="display-1">Dataset</h1>
 <p class='lead text-justify' style="font-size: 30px; line-height: 200%;">
-  Currently, the track dataset has <span id="artists_number" class="bigger"></span> artists, 
+  Currently, the track dataset has <span id="artists_number" class="bigger"></span> artists,
   <span id="albums_number" class="bigger"></span> albums and <span id="tracks_number" class="bigger"></span>
-  tracks spanning over <span id="years_number" class="bigger"></span> years and it keeps growing!
+  tracks spanning over <span id="years_number" class="bigger"></span> years
 </p>
 <div class="border-bottom" style="margin-bottom: 20px;">
   <h2 class="display-5">Exploratory data analysis</h2>
@@ -21,7 +21,7 @@
     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
       data-bs-parent="#accordionExample">
       <div class="accordion-body">
-        <img class="img-fluid" src="data:image/png;base64,{{albums_year}}"/>
+        <img class="img-fluid" src="data:image/png;base64,{{albums_year}}" />
       </div>
     </div>
   </div>
@@ -29,13 +29,13 @@
     <h2 class="accordion-header" id="headingTwo">
       <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
         data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="font-size: 25px;">
-        Artist count per genre
+        Artist count in most popular genres
       </button>
     </h2>
     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
       data-bs-parent="#accordionExample">
       <div class="accordion-body">
-        Artist distributions by genre
+        <img class="img-fluid" src="data:image/png;base64,{{artists_by_genre}}" />
       </div>
     </div>
   </div>
@@ -49,7 +49,7 @@
     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
       data-bs-parent="#accordionExample">
       <div class="accordion-body">
-        <img class="img-fluid" src="data:image/png;base64,{{popularity_artists}}"/>
+        <img class="img-fluid" src="data:image/png;base64,{{popularity_artists}}" />
       </div>
     </div>
   </div>
@@ -57,22 +57,44 @@
     <h2 class="accordion-header" id="headingFour">
       <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
         data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" style="font-size: 25px;">
-        Audio features by artist
+        Top 10 artists by popularity
       </button>
     </h2>
     <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
       data-bs-parent="#accordionExample">
       <div class="accordion-body">
+
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive" style="font-size: 25px;">
+        Audio features by artist
+      </button>
+    </h2>
+    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingOne"
+      data-bs-parent="#accordionExample">
+      <div class="accordion-body">
         <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
             data-bs-toggle="dropdown" aria-expanded="false">
             Select artist
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             {% for artist in artist_list %}
-            <li><a class="dropdown-item" href="#">{{artist}}</a></li>
+            <li><a artist_id="{{artist['id']}}" class="dropdown-item artist-features-dropdown">{{artist['name']}}</a>
+            </li>
             {% endfor %}
           </ul>
+          <div id="spinner_artist_features" class="spinner-grow"
+            style="display: none; width: 5rem; height: 5rem; margin-top: 5rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <div id="artist_radar_chart_div">
+            
+          </div>
         </div>
       </div>
     </div>
@@ -81,16 +103,15 @@
 <div class="border-bottom" style="margin-bottom: 20px; margin-top: 30px;">
   <h2 class="display-5">Download</h2>
 </div>
-<p class="lead">You can download the last version of this dataset last updated on {{dataset_last_update}}
-  here:</p>
-<button type="button" class="btn btn-primary" href="">Dataset<svg style="bottom: 0.1em; left: 0.4em;
+<p class="lead">You can download the latest version of this dataset here:</p>
+<button type="button" class="btn btn-primary" href="download_dataset">Dataset<svg style="bottom: 0.1em; left: 0.4em;
   position: relative;" class="bi" width="20" height="20" fill="currentColor">
     <use xlink:href="static/icons/bootstrap-icons.svg#download" />
   </svg></button>
 <script src="https://cdn.rawgit.com/coderitual/odoo/feature/codevember16/lib/odoo.js"></script>
 <script>
-  $.get(`http://127.0.0.1:5000/recommender/api/v1.0/get_counts`, function (data) {
-    console.log(data);
+  api_url = "http://127.0.0.1:5000/recommender/api/v1.0"
+  $.get(`${api_url}/get_counts`, function (data) {
     tracks_count = data.tracks;
     artists_count = data.artists;
     albums_count = data.albums;
@@ -99,6 +120,16 @@
     odoo.default({ el: '#albums_number', from: '', to: albums_count, animationDelay: 100 });
     odoo.default({ el: '#tracks_number', from: '', to: tracks_count, animationDelay: 100 });
     odoo.default({ el: '#years_number', from: '', to: years, animationDelay: 100 });
+  });
+  $(document).ready(function () {
+    $(document).on('click', '.artist-features-dropdown', function () {
+      $("#artist_radar_chart_div").empty();
+      $("#spinner_artist_features").fadeIn(500);
+      $.get(`${api_url}/get_artist_features=${$(event.target).attr('artist_id')}`, function (data) {
+        $("#spinner_artist_features").hide();
+        $("#artist_radar_chart_div").append(`<img class="img-fluid" src="data:image/png;base64,${data}" />`).hide.fadeIn(500);
+      });
+    });
   });
 </script>
 {% endblock %}

@@ -12,8 +12,9 @@ class Client:
         join album al on al.id = t.album_id
         where al.year >= {from_year} and al.year <= {to_year} 
         '''
-        if listed_artists:
-            query += f"and at.artist_id not in ({listed_artists}) "
+        if listed_artists != 0:
+            comma = "','"
+            query += f"and at.artist_id not in ('{comma.join(listed_artists)}') "
         if popular_artists:
             query += "and a.popularity <= 30 "
         if not_explicit:
@@ -36,10 +37,39 @@ class Client:
 
     def select_artists_by_popularity(self):
         result = self.conn.execute("select popularity, count(1) as artists from artist where popularity != 0 group by popularity order by 1 asc")
-        popularity_dist = []
-        for row in result:
-            popularity_dist.append({"popularity": row["popularity"], "artists": row["artists"]})
-        return popularity_dist
+        return [{"popularity": x["popularity"], "artists": x["artists"]} for x in result]
+    
+    def select_artists_by_genres(self):
+        result = self.conn.execute('''select 
+        regexp_split_to_table(genres, ',') as genre, count(1) as artists
+        from artist where genres not in ('','0')
+        group by regexp_split_to_table(genres, ',')
+        order by 2 desc
+        limit 20;
+        ''')
+        return [{"genre": x["genre"], "artists": x["artists"]} for x in result]
+    
+    def select_all_artists(self):
+        result = self.conn.execute("select id, name from artist where name != '0' order by name;")
+        return [{"id": x["id"], "name": x["name"]} for x in result]
+    
+    def select_artist_features(self, artist_id):
+        result = self.conn.execute(f'''
+        select AVG(acousticness) as acousticness, AVG(danceability) as danceability, AVG(energy) as energy, AVG(instrumentalness) as instrumentalness,
+        AVG(liveness) as liveness, AVG(speechiness) speechiness, AVG(valence) as valence, AVG(tempo) as tempo
+        from track t
+        join artist_track at on t.id = at.track_id
+        join artist a on a.id = at.artist_id
+        where a.id = '{artist_id}'
+        ''')
+        return result[0]
+    
+    def select_top_artists(self, top):
+        result = self.conn.execute(f'''
+        select a.name from artist a
+        order by a.popularity desc
+        limit {top};
+        ''')
 
     def __init__(self, DBUSER, DBPASSWORD, HOST, DATABASE):
         try:

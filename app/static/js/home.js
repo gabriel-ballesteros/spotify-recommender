@@ -62,36 +62,35 @@ $(document).ready(function () {
     $(document).on('click', '#empty-button', function () {
         $("#list-table").fadeOut(500, function () {
             $("#list-table").empty();
-            
+
         });
     });
 
     $(document).on('click', '#submit-button', function () {
-        
-        var ids = Array.from($('.remove-button').map(function () {
-            return $(this).attr('track_id');
-        }));
-        var artists_in_list = [0];
-        if ($("#listedArtists").is(":checked")){
-            artists_in_list = Array.from($('.artist-name').map(function () {
-                return $(this).text();
+        if (Array.from($('.remove-button')).length > 0) {
+            var ids = Array.from($('.remove-button').map(function () {
+                return $(this).attr('track_id');
             }));
-        }
-
-        $("#input_div").fadeOut(500);
-        $("#spinner_search").fadeIn(500);
-        $.get(`${api_url}/get_recommendations=${$("#fromYear").text()}&${$("#toYear").text()}&${artists_in_list.join()}&${+ $("#popularArtists").is(":checked")}&${+ $("#explicit").is(":checked")}&${ids.join(";")}`, function (data) {
-            $("#spinner_search").hide();
-            $("#recommendations_div").fadeIn(500);
-            data.forEach(element => {
-                var match_color = "limegreen";
-                if (element.match <= 20){
-                    match_color = "firebrick";
-                }
-                else if (element.match <= 80){
-                    match_color = "yellow";
-                }
-                $("#recommendations_table").append($(`
+            var artists_in_list = [0];
+            if ($("#listedArtists").is(":checked")) {
+                artists_in_list = Array.from($('.artist-name').map(function () {
+                    return $(this).text();
+                }));
+            }
+            $("#input_div").fadeOut(500);
+            $("#spinner_search").fadeIn(500);
+            $.get(`${api_url}/get_recommendations=${$("#fromYear").text()}&${$("#toYear").text()}&${artists_in_list.join()}&${+ $("#popularArtists").is(":checked")}&${+ $("#explicit").is(":checked")}&${ids.join(";")}`, function (data) {
+                $("#spinner_search").hide();
+                $("#recommendations_div").fadeIn(500);
+                data.forEach(element => {
+                    var match_color = "limegreen";
+                    if (element.match <= 20) {
+                        match_color = "firebrick";
+                    }
+                    else if (element.match <= 80) {
+                        match_color = "yellow";
+                    }
+                    $("#recommendations_table").append($(`
                 <tr>
                 <td>${element.name}</td>
                 <td>${element.artist}</td>
@@ -108,14 +107,16 @@ $(document).ready(function () {
                       style="position:relative; left: 0.5em;" src="static/img/Spotify_Icon_RGB_White.png"></a>
                 </td>
               </tr>`).hide().fadeIn(500));
+                });
             });
-        });
+        }
     });
 
     $(document).on('click', '#go_back_button', function () {
         $("#recommendations_div").fadeOut(500, function () {
-            $("#list-table").empty();
             $("#search-table").empty();
+            $("#list-table").empty();
+            $("#recommendations_table").empty();
             $("#search-text").val("");
             $("#input_div").fadeIn(500);
         });

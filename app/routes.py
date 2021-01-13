@@ -68,6 +68,7 @@ def generate_radar_chart(x, y):
     fig.write_image(buf)
     return base64.b64encode(buf.getbuffer()).decode("ascii")
 
+#Web pages
 @app.route('/')
 @app.route('/home')
 def home():
@@ -91,6 +92,12 @@ def dataset():
 def about():
     return render_template('about.html', page='about')
 
+@app.route('/download_dataset')
+def download_dataset():
+    path = "static/spotify_dataset.sql"
+    return send_file(path, as_attachment=True)
+
+#Web Services
 @app.route('/recommender/api/v1.0/search/<string:search_string>', methods=['GET'])
 def search(search_string):
     results = []
@@ -106,11 +113,6 @@ def get_recommendations(from_year, to_year, listed_artists, popular_artists, exc
 @app.route('/recommender/api/v1.0/get_counts', methods=['GET'])
 def get_counts():
     return jsonify(client.select_counts())
-
-@app.route('/download_dataset')
-def download_dataset():
-    path = "static/spotify_dataset.sql"
-    return send_file(path, as_attachment=True)
 
 @app.route('/get_artist_features=<string:artist_id>', methods=['GET'])
 def get_artist_features(artist_id):

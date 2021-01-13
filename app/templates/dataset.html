@@ -87,26 +87,30 @@
     <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
       data-bs-parent="#accordion1">
       <div class="accordion-body">
-        <div class="dropdown">
+        <div class="dropdown d-grid gap-2">
           <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
             data-bs-toggle="dropdown" aria-expanded="false">
             Select artist
           </a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            {%for artist in artist_list%} 
-              <li><a class="dropdown-item artist-features-dropdown" href="#" artist_id="{{artist['id']}}">{{artist['name']}}</a></li>
+            {%for artist in artist_list%}
+            <li><a class="dropdown-item artist-features-dropdown" href="#"
+                artist_id="{{artist['id']}}">{{artist['name']}}</a></li>
             {%endfor%}
           </ul>
         </div>
-        <div id="spinner_artist_features" class="spinner-grow" style="width: 3rem; height: 3rem; display: none;" role="status">
-          <span class="visually-hidden">Loading...</span>
+
+        <div class="d-flex justify-content-center">
+          <div id="spinner_artist_features" class="spinner-grow" style="width: 15rem; height: 15rem; margin-top: 5rem; display: none;"
+            role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </div>
+
         <div id="artist_radar_chart_div">
 
         </div>
-        <!--
-          <img class="img-fluid" src="data:image/png;base64,{{popularity_artists}}" />
-        -->
+
       </div>
     </div>
   </div>
@@ -153,8 +157,9 @@
       $("#artist_radar_chart_div").empty();
       $("#spinner_artist_features").fadeIn(500);
       $.get(`${api_url}/get_artist_features=${$(event.target).attr('artist_id')}`, function (data) {
+        $("#dropdownMenuLink").text(data.name);
         $("#spinner_artist_features").hide();
-        $("#artist_radar_chart_div").append(`<img class="rounded mx-auto d-block" src="data:image/png;base64,${data}" />`).hide().fadeIn(500);
+        $("#artist_radar_chart_div").append(`<img class="rounded mx-auto d-block" src="data:image/png;base64,${data.chart}" />`).hide().fadeIn(500);
       });
     });
   });

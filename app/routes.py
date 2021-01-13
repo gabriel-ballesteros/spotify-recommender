@@ -116,7 +116,8 @@ def get_counts():
 
 @app.route('/recommender/api/v1.0/get_artist_features=<string:artist_id>', methods=['GET'])
 def get_artist_features(artist_id):
-    return generate_radar_chart(['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'speechiness', 'valence'], list(client.select_artist_features(artist_id).values()))
+    name, features = client.select_artist_features(artist_id)
+    return {"name": name, "chart": generate_radar_chart(['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'speechiness', 'valence'], features)}
 
 @app.route('/recommender/api/v1.0/get_artists_top=<int:top>', methods=['GET'])
 def get_artists_top(top):

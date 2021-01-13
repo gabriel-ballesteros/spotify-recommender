@@ -62,14 +62,16 @@ class Client:
         join artist a on a.id = at.artist_id
         where a.id = '{artist_id}'
         ''')
-        return result[0]
+        return result.fetchone()
     
     def select_top_artists(self, top):
         result = self.conn.execute(f'''
-        select a.name from artist a
+        select a.name, a.popularity, a.img, a.genres
+        from artist a
         order by a.popularity desc
         limit {top};
         ''')
+        return [{"popularity": x["popularity"], "name": x["name"], "img": x["img"], "genres": x["genres"]} for x in result]
 
     def __init__(self, DBUSER, DBPASSWORD, HOST, DATABASE):
         try:

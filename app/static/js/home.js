@@ -8,8 +8,8 @@ $(document).ready(function () {
             $("#search-button").append(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     Loading...`);
             $("#search-table").empty();
-            $.get(`${api_url}/search/${document.getElementById("search-text").value}`, function (data) {
-                $("#search-table").empty()
+            $.get(`${api_url}/search=${document.getElementById("search-text").value}`, function (data) {
+                $("#search-table").empty();
                 data.forEach(async element => {
                     $("#search-table").append($(
                         `<tr>

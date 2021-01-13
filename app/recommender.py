@@ -18,19 +18,11 @@ def get_recommendation(client, from_year, to_year, listed_artists, popular_artis
     tracks_list = pd.DataFrame.from_dict(client.select_all_tracks(listed_artists, popular_artists, not_explicit, from_year, to_year),
     orient="columns")
     tracks_list.columns=["name", "artist", "album", "year", "uri", "img", "acousticness", "danceability", "energy", "instrumentalness", "liveness", "speechiness", "valence", "tempo"]
-    
     scaler = StandardScaler()
     tracks_list[["acousticness", "danceability", "energy", "instrumentalness", "liveness", "speechiness", "valence", "tempo"]] = scaler.fit_transform(tracks_list[["acousticness", "danceability", "energy", "instrumentalness", "liveness", "speechiness", "valence", "tempo"]])
-
     tracks_list.set_index(["name", "artist", "album", "year", "uri", "img"], inplace=True)
 
-    name_list = []
-    artist_list = []
-    album_list = []
-    year_list = []
-    img_list = []
-    uri_list = []
-    match_list = []
+    name_list, artist_list, album_list, year_list, img_list, uri_list, match_list = ([] for i in range(7))
 
     for features in features_list:
         song = pd.DataFrame(columns=['acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence','tempo'])

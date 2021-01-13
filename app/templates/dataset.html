@@ -10,7 +10,7 @@
 <div class="border-bottom" style="margin-bottom: 20px;">
   <h2 class="display-5">Exploratory data analysis</h2>
 </div>
-<div class="accordion" style="margin-top: 40px;">
+<div class="accordion" id="accordion1" style="margin-top: 40px;">
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingOne">
       <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
@@ -18,8 +18,7 @@
         Album count by year
       </button>
     </h2>
-    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
-      data-bs-parent="#accordionExample">
+    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordion1">
       <div class="accordion-body">
         <img class="img-fluid" src="data:image/png;base64,{{albums_year}}" />
       </div>
@@ -32,8 +31,7 @@
         Artist count in most popular genres
       </button>
     </h2>
-    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-      data-bs-parent="#accordionExample">
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion1">
       <div class="accordion-body">
         <img class="img-fluid" src="data:image/png;base64,{{artists_by_genre}}" />
       </div>
@@ -47,7 +45,7 @@
       </button>
     </h2>
     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-      data-bs-parent="#accordionExample">
+      data-bs-parent="#accordion1">
       <div class="accordion-body">
         <img class="img-fluid" src="data:image/png;base64,{{popularity_artists}}" />
       </div>
@@ -61,45 +59,59 @@
       </button>
     </h2>
     <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
-      data-bs-parent="#accordionExample">
+      data-bs-parent="#accordion1">
       <div class="accordion-body">
+        <table class="table table-hover table-borderless">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 5%;"></th>
+              <th scope="col" style="width: 5%;"></th>
+              <th scope="col" style="width: 20%;"></th>
+              <th scope="col" style="width: 30%;"></th>
+            </tr>
+          </thead>
+          <tbody id="top_artist_table">
 
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
   <div class="accordion-item">
-    <h2 class="accordion-header" id="headingOne">
+    <h2 class="accordion-header" id="headingFive">
       <button class="accordion-button collapsed btn-secondary" type="button" data-bs-toggle="collapse"
         data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive" style="font-size: 25px;">
-        Audio features by artist
+        Average features by artist
       </button>
     </h2>
-    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingOne"
-      data-bs-parent="#accordionExample">
+    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
+      data-bs-parent="#accordion1">
       <div class="accordion-body">
         <div class="dropdown">
-          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+          <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
             data-bs-toggle="dropdown" aria-expanded="false">
             Select artist
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            {% for artist in artist_list %}
-            <li><a artist_id="{{artist['id']}}" class="dropdown-item artist-features-dropdown">{{artist['name']}}</a>
-            </li>
-            {% endfor %}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            {%for artist in artist_list%} 
+              <li><a class="dropdown-item artist-features-dropdown" href="#" artist_id="{{artist['id']}}">{{artist['name']}}</a></li>
+            {%endfor%}
           </ul>
-          <div id="spinner_artist_features" class="spinner-grow"
-            style="display: none; width: 5rem; height: 5rem; margin-top: 5rem;" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <div id="artist_radar_chart_div">
-            
-          </div>
         </div>
+        <div id="spinner_artist_features" class="spinner-grow" style="width: 3rem; height: 3rem; display: none;" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div id="artist_radar_chart_div">
+
+        </div>
+        <!--
+          <img class="img-fluid" src="data:image/png;base64,{{popularity_artists}}" />
+        -->
       </div>
     </div>
   </div>
 </div>
+
 <div class="border-bottom" style="margin-bottom: 20px; margin-top: 30px;">
   <h2 class="display-5">Download</h2>
 </div>
@@ -108,6 +120,7 @@
   position: relative;" class="bi" width="20" height="20" fill="currentColor">
     <use xlink:href="static/icons/bootstrap-icons.svg#download" />
   </svg></button>
+</div>
 <script src="https://cdn.rawgit.com/coderitual/odoo/feature/codevember16/lib/odoo.js"></script>
 <script>
   api_url = "http://127.0.0.1:5000/recommender/api/v1.0"
@@ -122,12 +135,26 @@
     odoo.default({ el: '#years_number', from: '', to: years, animationDelay: 100 });
   });
   $(document).ready(function () {
+    $.get(`${api_url}/get_artists_top=10`, function (data) {
+      var pos = 1;
+      data.forEach(async element => {
+        $("#top_artist_table").append($(
+          `<tr>
+                    <td>#${pos}</td>
+                    <td><img src="${element.img}" class="rounded-circle" width="100rem"></td>
+                    <td>${element.name}</td>
+                    <td>${element.genres}</td>
+            </tr>`
+        ).hide().fadeIn(500));
+        pos += 1;
+      });
+    });
     $(document).on('click', '.artist-features-dropdown', function () {
       $("#artist_radar_chart_div").empty();
       $("#spinner_artist_features").fadeIn(500);
       $.get(`${api_url}/get_artist_features=${$(event.target).attr('artist_id')}`, function (data) {
         $("#spinner_artist_features").hide();
-        $("#artist_radar_chart_div").append(`<img class="img-fluid" src="data:image/png;base64,${data}" />`).hide.fadeIn(500);
+        $("#artist_radar_chart_div").append(`<img class="rounded mx-auto d-block" src="data:image/png;base64,${data}" />`).hide().fadeIn(500);
       });
     });
   });

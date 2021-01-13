@@ -98,7 +98,7 @@ def download_dataset():
     return send_file(path, as_attachment=True)
 
 #Web Services
-@app.route('/recommender/api/v1.0/search/<string:search_string>', methods=['GET'])
+@app.route('/recommender/api/v1.0/search=<string:search_string>', methods=['GET'])
 def search(search_string):
     results = []
     if search_string:
@@ -114,6 +114,10 @@ def get_recommendations(from_year, to_year, listed_artists, popular_artists, exc
 def get_counts():
     return jsonify(client.select_counts())
 
-@app.route('/get_artist_features=<string:artist_id>', methods=['GET'])
+@app.route('/recommender/api/v1.0/get_artist_features=<string:artist_id>', methods=['GET'])
 def get_artist_features(artist_id):
-    return generate_radar_chart(['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'speechiness', 'valence', 'tempo'], list(client.select_artist_features(artist_id).values()))
+    return generate_radar_chart(['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'speechiness', 'valence'], list(client.select_artist_features(artist_id).values()))
+
+@app.route('/recommender/api/v1.0/get_artists_top=<int:top>', methods=['GET'])
+def get_artists_top(top):
+    return jsonify(client.select_top_artists(top))

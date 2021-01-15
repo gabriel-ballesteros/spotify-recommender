@@ -18,7 +18,7 @@ $(document).ready(function () {
                     <td>${element.album.name}</td>
                     <td>${element.album.release_date.substr(0, 4)}</td>
                     <td><button track_id="${element.id}"
-                    type="button" class="btn btn-primary table-button add-button">Add
+                    type="button" class="btn btn-primary btn-small table-button add-button" style="width: 50%;">
                     <svg class="bi" width="20" height="20" fill="currentColor" style="position: relative; left: 0.2em; bottom: 0.1em;">
                     <use xlink:href="static/icons/bootstrap-icons.svg#plus-square-fill" />
                         </svg></button></td>
@@ -42,7 +42,7 @@ $(document).ready(function () {
             <td>${$(this).parent().parent().children().eq(2).text()}</td>
             <td>${$(this).parent().parent().children().eq(3).text()}</td>
             <td class="d-grid gap-2"><button track_id="${$(this).attr("track_id")}"
-            type="button" class="btn btn-danger btn-block table-button remove-button" style="width: 2rem;">Remove
+            type="button" class="btn btn-danger btn-block table-button remove-button" style="width: 50%;">
             <svg class="bi" width="20" height="20" fill="currentColor" style="position: relative; left: 0.2em; bottom: 0.1em;">
             <use xlink:href="static/icons/bootstrap-icons.svg#dash-square-fill" />
             </svg></button></td>

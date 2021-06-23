@@ -8,14 +8,14 @@ The general idea is to compare the difference between all the features of the in
 
 For example, if we had only 2 features (or dimensions) named 1 as the horizontal axis and 2 as the vertical axis, we could see the tracks as the points p and q and the distance between them in a plane like this:
 
-![Pythagoras](http://spotify-recommender.gabrielballesteros.com/static/img/pythagoras.png)
+![Pythagoras](app/static/img/pythagoras.png)
 
 Or, if we had more dimensions n like in our case where n = 8:
 
-![Euclidean](http://spotify-recommender.gabrielballesteros.com/static/img/euclidean_distance.png)
+![Euclidean](app/static/img/pythagoras.png)
 
 Where p and q are the tracks and the subindexes (1, 2, ..., i, ..., n) are the features (acousticness, danceability, etc.)
 
-![Similarity](http://spotify-recommender.gabrielballesteros.com/static/img/similarity.png)
+![Similarity](app/static/img/similarity.png)
 
 and choose the track with similarity closest to 1.0 among the ones in the dataset.

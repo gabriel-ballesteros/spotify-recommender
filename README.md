@@ -12,7 +12,7 @@ For example, if we had only 2 features (or dimensions) named 1 as the horizontal
 
 Or, if we had more dimensions n like in our case where n = 8:
 
-![Euclidean](app/static/img/euclidean.png)
+![Euclidean](app/static/img/euclidean_distance.png)
 
 Where p and q are the tracks and the subindexes (1, 2, ..., i, ..., n) are the features (acousticness, danceability, etc.)
 

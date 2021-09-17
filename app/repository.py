@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from app import app
 
-class Client:
+class Repository:
 
     def select_all_tracks(self, listed_artists, popular_artists, not_explicit, from_year, to_year):
         query = f'''

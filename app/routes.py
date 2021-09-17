@@ -1,6 +1,6 @@
-from flask import render_template, make_response, jsonify, send_file
-from app import app, config, recommender
-from app.client import Client
+from flask import render_template, jsonify, send_file
+from app import app, config, services
+from app.repository import Repository
 import logging
 import base64
 import time
@@ -28,7 +28,7 @@ app.url_map.converters['str_list'] = StrListConverter
 
 sns.set_style("whitegrid")
 
-client = Client(config.DBUSER, config.DBPASSWORD, config.HOST, config.DATABASE)
+repository = Repository(config.DBUSER, config.DBPASSWORD, config.HOST, config.DATABASE)
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=config.SPOTIFY_CLIENT_ID, client_secret=config.SPOTIFY_CLIENT_SECRET))
 
@@ -78,11 +78,11 @@ def home():
 def dataset():
     #dataset_last_update = os.path.getmtime("/home/elros/spotify-recommender/app/static/spotify_dataset.sql")
     #datetime.utcfromtimestamp(dataset_last_update).strftime("%Y-%m-%d %H:%M:%S")
-    albums_per_year=client.select_albums_by_year()
-    artists_per_genre=client.select_artists_by_genres()
-    artists_per_popularity=client.select_artists_by_popularity()
+    albums_per_year=repository.select_albums_by_year()
+    artists_per_genre=repository.select_artists_by_genres()
+    artists_per_popularity=repository.select_artists_by_popularity()
     return render_template('dataset.html', page='dataset',
-    artist_list=client.select_all_artists(),
+    artist_list=repository.select_all_artists(),
     #dataset_last_update=str(datetime.utcfromtimestamp(dataset_last_update).strftime("%Y-%m-%d %H:%M:%S")),
     albums_year=generate_barplot([x["year"] for x in albums_per_year],[x["albums"] for x in albums_per_year],color="green",xrotation=90),
     artists_by_genre=generate_barplot([x["genre"] for x in artists_per_genre], [x["artists"] for x in artists_per_genre], color="darkcyan", xrotation=45),
@@ -107,18 +107,18 @@ def search(search_string):
 
 @app.route('/recommender/api/v1.0/get_recommendations=<int:from_year>&<int:to_year>&<str_list:listed_artists>&<int:popular_artists>&<int:exclude_explicit>&<str_list:track_ids>', methods=['GET'])
 def get_recommendations(from_year, to_year, listed_artists, popular_artists, exclude_explicit, track_ids):
-    names, artists, albums, years, imgs, uris, matches = recommender.get_recommendation(client, from_year, to_year, listed_artists, popular_artists, exclude_explicit, sp.audio_features(track_ids))
+    names, artists, albums, years, imgs, uris, matches = services.get_recommendation(repository, from_year, to_year, listed_artists, popular_artists, exclude_explicit, sp.audio_features(track_ids))
     return jsonify ([{"name": names[i], "artist": artists[i], "album": albums[i], "year": int(years[i]), "img": imgs[i], "uri": "https://open.spotify.com/track/" + uris[i][14:], "match": matches[i]} for i in range(len(names))])
 
 @app.route('/recommender/api/v1.0/get_counts', methods=['GET'])
 def get_counts():
-    return jsonify(client.select_counts())
+    return jsonify(repository.select_counts())
 
 @app.route('/recommender/api/v1.0/get_artist_features=<string:artist_id>', methods=['GET'])
 def get_artist_features(artist_id):
-    name, features = client.select_artist_features(artist_id)
+    name, features = repository.select_artist_features(artist_id)
     return {"name": name, "chart": generate_radar_chart(['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'speechiness', 'valence'], features)}
 
 @app.route('/recommender/api/v1.0/get_artists_top=<int:top>', methods=['GET'])
 def get_artists_top(top):
-    return jsonify(client.select_top_artists(top))
+    return jsonify(repository.select_top_artists(top))

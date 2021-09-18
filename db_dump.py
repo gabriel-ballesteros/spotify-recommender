@@ -12,7 +12,7 @@ try:
     conn = engine.connect()
 except Exception as e:
     print(e)
-'''
+
 initial_artists = [
     'the beatles',
     'the rolling stones',
@@ -192,7 +192,7 @@ for index,row in enumerate(result, start=1):
     conn.execute(f"update artist set name='{name}',genres='{genres}',popularity='{popularity}',img='{img}',uri='{uri}',tracks_dumped=false where id='{id}'")
     print(f'{index}/{result.rowcount} {name}')
 
-'''
+
 
 result = conn.execute("select id, name from album where tracks_dumped = false")
 for i, row in enumerate(result, start=1):

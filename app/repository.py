@@ -2,6 +2,15 @@ from sqlalchemy import create_engine
 from app import app
 
 class Repository:
+    
+    def __init__(self, DBUSER, DBPASSWORD, HOST, DATABASE):
+        try:
+            self.engine = create_engine(f'postgresql+psycopg2://{DBUSER}:{DBPASSWORD}@{HOST}/{DATABASE}')
+            self.conn = self.engine.connect()
+        except Exception as e:
+            app.logger.warning('Could not connect to the database on client.py file.')
+            app.logger.warning(f'Verify your credentials for {DBUSER}.')
+            app.logger.warning(e)
 
     def select_all_tracks(self, listed_artists, popular_artists, not_explicit, from_year, to_year):
         query = f'''
@@ -75,12 +84,3 @@ class Repository:
         limit {top};
         ''')
         return [{"popularity": x["popularity"], "name": x["name"], "img": x["img"], "genres": x["genres"]} for x in result]
-
-    def __init__(self, DBUSER, DBPASSWORD, HOST, DATABASE):
-        try:
-            self.engine = create_engine(f'postgresql+psycopg2://{DBUSER}:{DBPASSWORD}@{HOST}/{DATABASE}')
-            self.conn = self.engine.connect()
-        except Exception as e:
-            app.logger.warning('Could not connect to the database on client.py file.')
-            app.logger.warning(f'Verify your credentials for {DBUSER}.')
-            app.logger.warning(e)

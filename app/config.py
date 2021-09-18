@@ -7,3 +7,5 @@ DBUSER = os.getenv('DBUSER')
 DBPASSWORD = os.getenv('DBPASSWORD')
 HOST = os.getenv('HOST')
 DATABASE = os.getenv('DATABASE')
+
+DATASET_PATH = "static/spotify_dataset.sql"

@@ -16,6 +16,8 @@ Or, if we had more dimensions n like in our case where n = 8:
 
 Where p and q are the tracks and the subindexes (1, 2, ..., i, ..., n) are the features (acousticness, danceability, etc.)
 
+Then we normalize the similarity with the following index:
+
 ![Similarity](app/static/img/similarity.png)
 
 and choose the track with similarity closest to 1.0 among the ones in the dataset.

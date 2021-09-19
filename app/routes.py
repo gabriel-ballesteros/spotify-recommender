@@ -2,7 +2,6 @@ from flask import render_template, send_file
 from app import app, config, services
 from werkzeug.routing import BaseConverter
 import warnings
-warnings.filterwarnings("ignore")
 
 class StrListConverter(BaseConverter):
     regex = r'\w+(?:;\w+)*;?'
@@ -13,7 +12,8 @@ class StrListConverter(BaseConverter):
 
 app.url_map.converters['str_list'] = StrListConverter
 
-#Web pages
+### Web pages ###
+
 @app.route('/')
 @app.route('/home')
 def home():
@@ -29,27 +29,28 @@ def dataset():
 def about():
     return render_template('about.html', page='about')
 
-@app.route('/download_dataset')
+@app.route('/download-dataset')
 def download_dataset():
     return send_file(config.DATASET_PATH, as_attachment=True)
 
-#Web Services
+### Web Services ###
+
 @app.route('/recommender/api/v1.0/search=<string:search_string>', methods=['GET'])
 def search(search_string):
     return services.search(search_string)
 
-@app.route('/recommender/api/v1.0/get_recommendations=<int:from_year>&<int:to_year>&<str_list:listed_artists>&<int:popular_artists>&<int:exclude_explicit>&<str_list:track_ids>', methods=['GET'])
+@app.route('/recommender/api/v1.0/recommendations=<int:from_year>&<int:to_year>&<str_list:listed_artists>&<int:popular_artists>&<int:exclude_explicit>&<str_list:track_ids>', methods=['GET'])
 def get_recommendations(from_year, to_year, listed_artists, popular_artists, exclude_explicit, track_ids):
     return services.get_recommendations(from_year, to_year, listed_artists, popular_artists, exclude_explicit, track_ids)
 
-@app.route('/recommender/api/v1.0/get_counts', methods=['GET'])
+@app.route('/recommender/api/v1.0/stats', methods=['GET'])
 def get_counts():
     return services.get_counts()
 
-@app.route('/recommender/api/v1.0/get_artist_features=<string:artist_id>', methods=['GET'])
+@app.route('/recommender/api/v1.0/artist/<string:artist_id>/features', methods=['GET'])
 def get_artist_features(artist_id):
     return services.get_artist_features(artist_id)
 
-@app.route('/recommender/api/v1.0/get_artists_top=<int:top>', methods=['GET'])
+@app.route('/recommender/api/v1.0/artist/top=<int:top>', methods=['GET'])
 def get_artists_top(top):
     return services.get_artists_top(top)

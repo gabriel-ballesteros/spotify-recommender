@@ -132,8 +132,6 @@ for index, artist in enumerate(initial_artists,start=1):
     print(f"{index}/{len(initial_artists)}: {name}")
     sleep(2.5)
 
-
-
 result = conn.execute("select id from artist")
 for index,row in enumerate(result, start=1):
     artists = sp.artist_related_artists(row['id'])['artists']
@@ -175,7 +173,6 @@ for index,row in enumerate(result, start=1):
         pass
     conn.execute(f"update artist set tracks_dumped=true where id='{row['id']}'")
 
-
 result = conn.execute("select id from artist where name = '0' and genres = '0'")
 for index,row in enumerate(result, start=1):
     artist = sp.artist(row['id'])
@@ -191,8 +188,6 @@ for index,row in enumerate(result, start=1):
     uri = artist['uri']
     conn.execute(f"update artist set name='{name}',genres='{genres}',popularity='{popularity}',img='{img}',uri='{uri}',tracks_dumped=false where id='{id}'")
     print(f'{index}/{result.rowcount} {name}')
-
-
 
 result = conn.execute("select id, name from album where tracks_dumped = false")
 for i, row in enumerate(result, start=1):

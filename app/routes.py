@@ -47,10 +47,10 @@ def get_recommendations(from_year, to_year, listed_artists, popular_artists, exc
 def get_counts():
     return services.get_counts()
 
-@app.route('/recommender/api/v1.0/artist/<string:artist_id>/features', methods=['GET'])
+@app.route('/recommender/api/v1.0/artists/<string:artist_id>/features', methods=['GET'])
 def get_artist_features(artist_id):
     return services.get_artist_features(artist_id)
 
-@app.route('/recommender/api/v1.0/artist/top=<int:top>', methods=['GET'])
+@app.route('/recommender/api/v1.0/artists/top=<int:top>', methods=['GET'])
 def get_artists_top(top):
     return services.get_artists_top(top)

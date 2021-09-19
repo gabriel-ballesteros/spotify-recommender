@@ -79,7 +79,7 @@ $(document).ready(function () {
             }
             $("#input_div").fadeOut(500);
             $("#spinner_search").fadeIn(500);
-            $.get(`${api_url}/get_recommendations=${$("#fromYear").text()}&${$("#toYear").text()}&${artists_in_list.join()}&${+ $("#popularArtists").is(":checked")}&${+ $("#explicit").is(":checked")}&${ids.join(";")}`, function (data) {
+            $.get(`${api_url}/recommendations=${$("#fromYear").text()}&${$("#toYear").text()}&${artists_in_list.join()}&${+ $("#popularArtists").is(":checked")}&${+ $("#explicit").is(":checked")}&${ids.join(";")}`, function (data) {
                 $("#spinner_search").hide();
                 $("#recommendations_div").fadeIn(500);
                 data.forEach(element => {

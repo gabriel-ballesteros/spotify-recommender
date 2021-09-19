@@ -20,7 +20,7 @@
     </h2>
     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordion1">
       <div class="accordion-body">
-        <img class="img-fluid" src="data:image/png;base64,{{albums_year}}" />
+        <!-- TODO: Chart js barplot with albums_per_year -->
       </div>
     </div>
   </div>
@@ -33,7 +33,7 @@
     </h2>
     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion1">
       <div class="accordion-body">
-        <img class="img-fluid" src="data:image/png;base64,{{artists_by_genre}}" />
+        <!-- TODO: Chart js barplot with artists_by_genre-->
       </div>
     </div>
   </div>
@@ -47,7 +47,7 @@
     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
       data-bs-parent="#accordion1">
       <div class="accordion-body">
-        <img class="img-fluid" src="data:image/png;base64,{{popularity_artists}}" />
+        <!-- TODO: Chart js barplot with artists_by_popularity -->
       </div>
     </div>
   </div>
@@ -128,7 +128,7 @@
 <script src="https://cdn.rawgit.com/coderitual/odoo/feature/codevember16/lib/odoo.js"></script>
 <script>
   api_url = "http://127.0.0.1:5000/recommender/api/v1.0"
-  $.get(`${api_url}/get_counts`, function (data) {
+  $.get(`${api_url}/stats`, function (data) {
     tracks_count = data.tracks;
     artists_count = data.artists;
     albums_count = data.albums;
@@ -139,7 +139,7 @@
     odoo.default({ el: '#years_number', from: '', to: years, animationDelay: 100 });
   });
   $(document).ready(function () {
-    $.get(`${api_url}/get_artists_top=10`, function (data) {
+    $.get(`${api_url}/artists/top=10`, function (data) {
       var pos = 1;
       data.forEach(async element => {
         $("#top_artist_table").append($(
@@ -156,9 +156,10 @@
     $(document).on('click', '.artist-features-dropdown', function () {
       $("#artist_radar_chart_div").empty();
       $("#spinner_artist_features").fadeIn(500);
-      $.get(`${api_url}/get_artist_features=${$(event.target).attr('artist_id')}`, function (data) {
+      $.get(`${api_url}/artists/${$(event.target).attr('artist_id')}/features`, function (data) {
         $("#dropdownMenuLink").text(data.name);
         $("#spinner_artist_features").hide();
+        // TODO: Change line next line to append chart.js radar chart instead
         $("#artist_radar_chart_div").append(`<img class="rounded mx-auto d-block" src="data:image/png;base64,${data.chart}" />`).hide().fadeIn(500);
       });
     });
